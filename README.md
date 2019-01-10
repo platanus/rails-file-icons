@@ -26,9 +26,10 @@ Or install it yourself as:
  4. vivid
 
 
-> 'square-o' is default theme
-> Specify/set default theme by `ENV['DEFAULT_FILE_ICON_STYLE']` e.g. `ENV['DEFAULT_FILE_ICON_STYLE'] = 'vivid'`
-> Theme name can also be passed as second argument to the method call. Example below in usage section
+- 'square-o' is default theme
+- Specify/set default theme by `ENV['DEFAULT_FILE_ICON_STYLE']` e.g. `ENV['DEFAULT_FILE_ICON_STYLE'] = 'vivid'`
+- Theme name can also be passed as second argument to the method call. Example below in usage section
+
 
 ## Usage
 
