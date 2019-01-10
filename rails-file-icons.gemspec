@@ -6,10 +6,10 @@ require 'rails-file-icons/version'
 Gem::Specification.new do |gem|
   gem.name          = "rails-file-icons"
   gem.version       = RailsFileIcons::VERSION
-  gem.authors       = ["Chris Aitchison"]
-  gem.email         = ["cmaitchison@gmail.com"]
-  gem.description   = %q{File Icons for Rails}
-  gem.summary       = %q{Easy File Icons using the Rails Asset Pipeline}
+  gem.authors       = ["Chris Aitchison", "Akhil Bansal"]
+  gem.email         = ["cmaitchison@gmail.com", 'bansalakhil30.10@gmail.com']
+  gem.description   = %q{SVG File Icons for Rails. Supporting 2 themes, SVG icons from https://fileicons.org/ }
+  gem.summary       = %q{Easy SVG File Icons using the Rails Asset Pipeline}
   gem.homepage      = ""
   gem.license       = "MIT"
 

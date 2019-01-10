@@ -1,25 +1,34 @@
-require "rails-file-icons/engine"
+require 'rails-file-icons/engine'
 
 module Icon
 
-  KNOWN_EXTENSIONS = %w{
-    3gp 7z ace ai aif aiff amr asf asx bat bin bmp bup cab cbr cda cdl cdr chm
-    dat divx dll dmg doc docx dss dvf dwg eml eps exe fla flv gif gz hqx htm html
-    ifo indd iso jar jpeg jpg lnk log m4a m4b m4p m4v mcd mdb mid mov mp2 mp4
-    mpeg mpg msi mswmm ogg pdf png pps ppt pptx ps psd pst ptb pub qbb qbw qxd ram
-    rar rm rmvb rtf sea ses sit sitx ss swf tgz thm tif tmp torrent ttf txt
-    vcd vob wav wma wmv wps xls xlsx xpi zip
-    }.inject({}) do |known_extensions, ext|
-      known_extensions[ext] = "fileicons/file_extension_#{ext}.png"
-      known_extensions
-    end
+  # FileIcon available styles
+  STYLES = ['classic', 'high-contrast', 'square-o', 'vivid'].freeze
 
-  def self.for_filename filename
-    for_ext File.extname(filename)
+  # Default style
+  DEFAULT_STYLE = ENV['DEFAULT_FILE_ICON_STYLE'] || 'square-o'
+
+  # Available extensions
+  KNOWN_EXTENSIONS = ['3g2','3ga','3gp','7z','aa','aac','ac','accdb','accdt','ace','adn','ai','aif','aifc','aiff','ait','amr','ani','apk','app','applescript','asax','asc','ascx','asf','ash','ashx','asm','asmx','asp','aspx','asx','au','aup','avi','axd','aze','bak','bash','bat','bin','blank','bmp','bowerrc','bpg','browser','bz2','bzempty','c','cab','cad','caf','cal','cd','cdda','cer','cfg','cfm','cfml','cgi','chm','class','cmd','code-workspace','codekit','coffee','coffeelintignore','com','compile','conf','config','cpp','cptx','cr2','crdownload','crt','crypt','cs','csh','cson','csproj','css','csv','cue','cur','dart','dat','data','db','dbf','deb','default','dgn','dist','diz','dll','dmg','dng','doc','docb','docm','docx','dot','dotm','dotx','download','dpj','ds_store','dsn','dtd','dwg','dxf','editorconfig','el','elf','eml','enc','eot','eps','epub','eslintignore','exe','f4v','fax','fb2','fla','flac','flv','fnt','folder','fon','gadget','gdp','gem','gif','gitattributes','gitignore','go','gpg','gpl','gradle','gz','h','handlebars','hbs','heic','hlp','hs','hsl','htm','html','ibooks','icns','ico','ics','idx','iff','ifo','image','img','iml','in','inc','indd','inf','info','ini','inv','iso','j2','jar','java','jpe','jpeg','jpg','js','json','jsp','jsx','key','kf8','kmk','ksh','kt','kts','kup','less','lex','licx','lisp','lit','lnk','lock','log','lua','m','m2v','m3u','m3u8','m4','m4a','m4r','m4v','map','master','mc','md','mdb','mdf','me','mi','mid','midi','mk','mkv','mm','mng','mo','mobi','mod','mov','mp2','mp3','mp4','mpa','mpd','mpe','mpeg','mpg','mpga','mpp','mpt','msg','msi','msu','nef','nes','nfo','nix','npmignore','ocx','odb','ods','odt','ogg','ogv','ost','otf','ott','ova','ovf','p12','p7b','pages','part','partial','pcd','pdb','pdf','pem','pfx','pgp','ph','phar','php','pid','pkg','pl','plist','pm','png','po','pom','pot','potx','pps','ppsx','ppt','pptm','pptx','prop','ps','ps1','psd','psp','pst','pub','py','pyc','qt','ra','ram','rar','raw','rb','rdf','rdl','reg','resx','retry','rm','rom','rpm','rpt','rsa','rss','rst','rtf','ru','rub','sass','scss','sdf','sed','sh','sit','sitemap','skin','sldm','sldx','sln','sol','sphinx','sql','sqlite','step','stl','svg','swd','swf','swift','swp','sys','tar','tax','tcsh','tex','tfignore','tga','tgz','tif','tiff','tmp','tmx','torrent','tpl','ts','tsv','ttf','twig','txt','udf','vb','vbproj','vbs','vcd','vcf','vcs','vdi','vdx','vmdk','vob','vox','vscodeignore','vsd','vss','vst','vsx','vtx','war','wav','wbk','webinfo','webm','webp','wma','wmf','wmv','woff','woff2','wps','wsf','xaml','xcf','xfl','xlm','xls','xlsm','xlsx','xlt','xltm','xltx','xml','xpi','xps','xrb','xsd','xsl','xspf','xz','yaml','yml','z','zip','zsh'].freeze
+
+  # Build nested hash with styles
+  EXTENSION_STYLE_ICONS = STYLES.inject({}) do |m, style|
+    m[style] = {}
+    KNOWN_EXTENSIONS.each do |ext|
+      m[style][ext] = "fileicons/#{style}/#{ext}.svg"
+    end
+    m
+  end.freeze
+
+  # Get file icon by filename
+  def self.for_filename(filename, style = DEFAULT_STYLE)
+    for_ext(File.extname(filename), style)
   end
 
-  def self.for_ext file_extension
+  # Get file icon by extension
+  def self.for_ext(file_extension, style = DEFAULT_STYLE)
     ext = file_extension.start_with?('.') ? file_extension[1..-1] : file_extension
-    KNOWN_EXTENSIONS[ext.downcase] || 'fileicons/file_extension_unknown.png'
+
+    EXTENSION_STYLE_ICONS[style][ext.downcase] || for_ext('blank', style)
   end
 end
